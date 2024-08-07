@@ -1,5 +1,6 @@
 // dependencies
 import React from "react";
+import { DateTime } from "luxon";
 
 // components
 import { Text } from "@/components";
@@ -11,10 +12,18 @@ const Calendar: React.FC = () => {
   return (
     <div>
       <Text className="bg-red-400">Choose a day</Text>
-      <div className="flex">
+      <div className="flex flex-wrap">
         {dateList.map((date) => (
-          <button key={date.date}>
-            <Text>{date.day}</Text>
+          <button className="w-20 border border-red-100" key={date.date}>
+            <Text size="xxs" weight="text-400">
+              {date.day.substring(0, 3)}
+            </Text>
+            <div>
+              <Text size="xs" weight="text-400">
+                {/* 8 Aug 24 */}
+                {DateTime.fromISO(date.date).toFormat("dd LLL yy")}
+              </Text>
+            </div>
           </button>
         ))}
       </div>

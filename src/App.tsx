@@ -1,12 +1,11 @@
-// components
-import Calendar from "@/components/Calendar";
+// dependencies
+import { RouterProvider } from "react-router-dom";
+
+// router
+import router from "./router";
 
 function App() {
-  return (
-    <>
-      <Calendar />
-    </>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
