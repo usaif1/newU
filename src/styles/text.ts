@@ -1,6 +1,7 @@
 export enum Color {
-  primary = "#101820",
-  secondary = "#FEE715",
+  primary = "#E7E7D6",
+  secondary = "#FF8C00",
+  alternate = "#AEAC92",
 }
 
 export enum Size {
