@@ -7,6 +7,8 @@ export const habitList: Habit[] = [
     name: "Drink Water",
     description: "Drink at least 8 glasses of water each day to stay hydrated.",
     valueRequired: true,
+    valueText: "How much water will you drink?",
+    unit: "glasses",
   },
 
   {
@@ -23,6 +25,8 @@ export const habitList: Habit[] = [
     description:
       "Engage in physical activity for at least 30 minutes to improve overall health.",
     valueRequired: true,
+    valueText: "How many hours will you exercise?",
+    unit: "hours",
   },
 
   {
@@ -31,6 +35,8 @@ export const habitList: Habit[] = [
     description:
       "Read for at least 10 pages a day to expand your knowledge and improve focus.",
     valueRequired: true,
+    valueText: "How many pages will you read?",
+    unit: "pages",
   },
 
   {
