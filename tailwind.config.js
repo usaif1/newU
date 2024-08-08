@@ -20,6 +20,12 @@ export default {
         lightorange: "#FF6D00",
         orange: "#FF5800",
       },
+      textColor: {
+        primary: "#E7E7D6",
+        secondary: "#AEAC92",
+        alternate: "#FF8C00",
+        complementary: "#FF6D00",
+      },
     },
   },
   plugins: [],

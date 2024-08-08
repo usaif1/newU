@@ -11,14 +11,17 @@ import {
   TextWeight,
 } from "@/styles/text";
 
-type TextProps = React.HTMLAttributes<HTMLLabelElement> & {
+type FormLabel = React.DetailedHTMLProps<
+  React.LabelHTMLAttributes<HTMLLabelElement>,
+  HTMLLabelElement
+> & {
   color?: TextColor;
   weight?: TextWeight;
   size?: TextSize;
   children: React.ReactNode;
 };
 
-const Text: React.FC<TextProps> = (props) => {
+const FormLabel: React.FC<FormLabel> = (props) => {
   const textStyle: React.CSSProperties = {
     color: Color[props.color || "primary"],
     fontWeight: Weight[props.weight || "text-400"],
@@ -26,10 +29,10 @@ const Text: React.FC<TextProps> = (props) => {
   };
 
   return (
-    <label style={textStyle} {...props}>
+    <label {...props} style={textStyle}>
       {props.children}
     </label>
   );
 };
 
-export default Text;
+export default FormLabel;

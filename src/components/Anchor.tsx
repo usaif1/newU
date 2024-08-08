@@ -1,6 +1,6 @@
 // de
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, LinkProps } from "react-router-dom";
 
 // styling
 import {
@@ -12,13 +12,14 @@ import {
   TextWeight,
 } from "@/styles/text";
 
-type AnchorProps = React.HTMLAttributes<HTMLAnchorElement> & {
-  to: string;
-  children: React.ReactNode;
-  color?: TextColor;
-  weight?: TextWeight;
-  size?: TextSize;
-};
+type AnchorProps = LinkProps &
+  React.RefAttributes<HTMLAnchorElement> & {
+    to: string;
+    children: React.ReactNode;
+    color?: TextColor;
+    weight?: TextWeight;
+    size?: TextSize;
+  };
 
 const Anchor: React.FC<AnchorProps> = (props) => {
   const textStyle: React.CSSProperties = {

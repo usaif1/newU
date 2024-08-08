@@ -12,7 +12,10 @@ import {
 
 type size = "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 
-type HeadingProps = React.HTMLAttributes<HTMLHeadingElement> & {
+type HeadingProps = React.DetailedHTMLProps<
+  React.HTMLAttributes<HTMLHeadingElement>,
+  HTMLHeadingElement
+> & {
   size?: size;
   color?: TextColor;
   weight?: TextWeight;

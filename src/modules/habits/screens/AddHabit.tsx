@@ -2,17 +2,10 @@
 import React from "react";
 
 // components
-import { Divider, FormLabel, Heading, ScreenWrapper, Text } from "@/components";
-import { ExerciseForm, HydrationForm, MeditationForm } from "../components";
+import { Divider, FormLabel, Heading, ScreenWrapper } from "@/components";
 import { habitList } from "@/data/habits";
 
 const AddActivity: React.FC = () => {
-  const habitid = new URLSearchParams(window.location.search).get("habitid");
-
-  const currenHabit = habitList.find((habit) => {
-    return habit.id === habitid;
-  });
-
   return (
     <ScreenWrapper className="py-10">
       <Heading size="h6" align="center">
@@ -20,10 +13,10 @@ const AddActivity: React.FC = () => {
       </Heading>
       <Divider height="1rem" />
       <form>
-        <div>
+        <div className="w-full">
           <FormLabel>Select habit to track</FormLabel>
           <Divider />
-          <select>
+          <select className="w-full h-8 rounded-lg text-sm text-primary bg-black border border-yellow px-2">
             {habitList.map((habit) => {
               return (
                 <option key={habit.id} className="capitalize" value={habit.id}>
@@ -34,23 +27,27 @@ const AddActivity: React.FC = () => {
           </select>
         </div>
         <Divider height="2rem" />
-        <div>
-          {habitid === "hydration" ? (
-            <div>
-              <Text>How many glasses of water</Text>
-            </div>
-          ) : null}
-          {habitid === "meditation" ? (
-            <Text>{currenHabit?.description}</Text>
-          ) : null}
-
+        <div className="w-full">
+          <FormLabel size="sm">
+            How frequently do you want to track it?
+          </FormLabel>
           <Divider />
-          {currenHabit?.valueRequired ? <input type="number" /> : null}
+          <div>
+            <div className="flex gap-x-4 items-center">
+              <input type="radio" id="daily" name="daily" value="daily" />
+              <FormLabel size="sm" htmlFor="daily">
+                Daily
+              </FormLabel>
+            </div>
+            <div className="flex gap-x-4 items-center">
+              <input type="radio" id="weekly" name="weekly" value="weekly" />
+              <FormLabel size="sm" htmlFor="weekly">
+                Weekly
+              </FormLabel>
+            </div>
+          </div>
         </div>
       </form>
-      {/* {habitid === "hydration" ? <HydrationForm /> : null}
-      {habitid === "meditation" ? <MeditationForm /> : null}
-      {habitid === "exercise" ? <ExerciseForm /> : null} */}
     </ScreenWrapper>
   );
 };
