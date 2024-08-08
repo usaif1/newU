@@ -2,17 +2,24 @@
 import React from "react";
 
 // components
-import { Heading, ScreenWrapper, Text } from "@/components";
+import { Heading, ScreenWrapper, Divider } from "@/components";
+import { HabitCard } from "../components";
+
+// data
+import { habitList } from "@/data/habits";
 
 const Home: React.FC = () => {
   return (
-    <ScreenWrapper className="pt-10">
-      {/* <Text className="text-center" color="primary" weight="text-600" size="xl">
-        Select a habit
-      </Text> */}
+    <ScreenWrapper className="py-10">
       <Heading size="h4" align="center">
         Select a habit
       </Heading>
+      <Divider height="1rem" />
+      <div className="flex flex-col gap-y-6">
+        {habitList.map((habit) => {
+          return <HabitCard key={habit.id} habit={habit} />;
+        })}
+      </div>
     </ScreenWrapper>
   );
 };

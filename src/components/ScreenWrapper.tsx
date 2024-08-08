@@ -10,7 +10,7 @@ const ScreenWrapper: React.FC<ScreenWrapperProps> = (props) => {
   return (
     <div
       style={{
-        width: props?.width || "70%",
+        width: props?.width || "80%",
         margin: "auto",
         minHeight: "100vh",
         backgroundColor: "transparent",

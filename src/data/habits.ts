@@ -3,17 +3,17 @@ import { Habit } from "@/types";
 
 export const habitList: Habit[] = [
   {
+    id: "hydration",
+    name: "Drink Water",
+    description:
+      "Drink at least 8 glasses of water each day to stay hydrated.",
+  },
+
+  {
     id: "meditation",
     name: "Meditation",
     description:
       "Practice meditation for 10-15 minutes to reduce stress and increase focus.",
-  },
-
-  {
-    id: "hydration",
-    name: "Drink Water",
-    description:
-      "Drink at least 8 glasses of water each day to stay hydrated and maintain overall health.",
   },
 
   {
@@ -24,7 +24,7 @@ export const habitList: Habit[] = [
   },
 
   {
-    id: "Reading",
+    id: "reading",
     name: "Daily Reading",
     description:
       "Read for at least 10 pages a day to expand your knowledge and improve focus.",
