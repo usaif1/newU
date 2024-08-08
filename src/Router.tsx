@@ -7,7 +7,7 @@ import { NotFound } from "@/components";
 
 // screens
 import { Home } from "@/modules/home/screens";
-import { AddActivity, EditActivity } from "@/modules/activities/screens";
+import { AddHabit, EditHabit } from "@/modules/habits/screens";
 
 const Router: React.FC = () => {
   const router = createBrowserRouter([
@@ -18,19 +18,19 @@ const Router: React.FC = () => {
     },
 
     {
-      path: "/activities",
+      path: "/habits",
       children: [
         {
           index: true,
           element: <NotFound />,
         },
         {
-          path: "add/:habitid", // Route with parameter
-          element: <AddActivity />,
+          path: "add", // Route with parameter
+          element: <AddHabit />,
         },
         {
           path: "edit/:habitinstance", // Route with parameter
-          element: <EditActivity />,
+          element: <EditHabit />,
         },
       ],
     },

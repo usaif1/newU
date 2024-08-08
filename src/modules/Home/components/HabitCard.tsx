@@ -15,7 +15,7 @@ type HabitCardProps = {
 const HabitCard: React.FC<HabitCardProps> = ({ habit }) => {
   return (
     <Link
-      to={`/activities/add/${habit.id}`}
+      to={`/activities/add?habitid=${habit.id}`}
       className="h-24 border border-gray-200 rounded-md px-4 py-2"
     >
       <div className="flex items-center justify-between">
