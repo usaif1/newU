@@ -3,6 +3,7 @@ export enum Color {
   secondary = "#AEAC92",
   alternate = "#FF8C00",
   complementary = "#FF6D00",
+  dark = "#1E1E1D",
 }
 
 export enum Size {

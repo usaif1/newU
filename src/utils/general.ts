@@ -1,25 +1,16 @@
 import { DateTime } from "luxon";
 
-function generateFormattedDates(): { date: string; day: string }[] {
-  const dates: { date: string; day: string }[] = [];
-  const today = DateTime.local();
+function generateFormattedDates() {
+  const dates = [];
+  const start = DateTime.local(2024, 8, 1); // August 1st, 2024
 
-  // Generate dates for the week before today
-  for (let i = 7; i > 0; i--) {
-    const pastDate = today.minus({ days: i });
-    dates.push({
-      date: pastDate.toFormat("yyyy-MM-dd"),
-      day: pastDate.toFormat("cccc"),
-    });
-  }
-
-  // Generate dates for the 23 days after today
-  for (let i = 1; i <= 23; i++) {
-    const futureDate = today.plus({ days: i });
-    dates.push({
-      date: futureDate.toFormat("yyyy-MM-dd"),
-      day: futureDate.toFormat("cccc"),
-    });
+  for (let i = 0; i < 15; i++) {
+    const date = start.plus({ days: i });
+    const dateObject = {
+      date: date.toFormat("yyyy-MM-dd"),
+      day: date.toFormat("dd LLL yyyy"), // '01 Aug 2024'
+    };
+    dates.push(dateObject);
   }
 
   return dates;

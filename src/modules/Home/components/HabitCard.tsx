@@ -1,36 +1,29 @@
 // dependencies
 import React from "react";
-import { Link } from "react-router-dom";
 
 // components
 import { Divider, Text } from "@/components";
 
 // types
-import { Habit } from "@/types";
+import { HabitInstace } from "@/types";
 
 type HabitCardProps = {
-  habit: Habit;
+  habitInstance: HabitInstace;
 };
 
-const HabitCard: React.FC<HabitCardProps> = ({ habit }) => {
+const HabitCard: React.FC<HabitCardProps> = ({ habitInstance }) => {
   return (
-    <Link
-      to={`/activities/add?habitid=${habit.id}`}
-      className="h-24 border border-gray-200 rounded-md px-4 py-2"
-    >
+    <div className="h-24 border border-gray-200 rounded-md px-4 py-2">
       <div className="flex items-center justify-between">
         <Text weight="text-600" color="complementary">
-          {habit.name}
-        </Text>
-        <Text size="xxs" weight="text-600" className="underline">
-          Start tracking
+          {habitInstance.habit?.habit_name}
         </Text>
       </div>
       <Divider />
       <Text size="xxs" color="secondary">
-        {habit.description}
+        {habitInstance.habit?.habit_description}
       </Text>
-    </Link>
+    </div>
   );
 };
 

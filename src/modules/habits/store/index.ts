@@ -5,19 +5,25 @@ import { create } from "zustand";
 import createSelectors from "@/utils/selectors";
 
 // types
-import { Habit } from "@/types";
-
-type SelectedHabitFrequency = "daily" | "weekly";
+import { HabitInstace, TrackedHabits } from "@/types";
 
 // state
 type HabitsState = {
-  selectedHabit: Habit | undefined;
-  selectedHabitFrequency: SelectedHabitFrequency;
+  // new habit instances
+  dailyHabitsInstances: HabitInstace[];
+  weeklyHabitsInstances: HabitInstace[];
+
+  //tracking
+  trackedHabits: TrackedHabits[];
 };
 
 const HabitsInitialState: HabitsState = {
-  selectedHabit: undefined,
-  selectedHabitFrequency: "daily",
+  // new habit instances
+  dailyHabitsInstances: [],
+  weeklyHabitsInstances: [],
+
+  //tracking
+  trackedHabits: [],
 };
 
 // actions

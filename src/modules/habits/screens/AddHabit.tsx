@@ -1,39 +1,65 @@
 // dependencies
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 // components
 import { Divider, FormLabel, Heading, ScreenWrapper, Text } from "@/components";
 import { habitList } from "@/data/habits";
 
 // store
-import habitsStore from "../store";
+import { homeStore, habitsStore } from "@/global/stores";
+
+// types
+import { Habit, HabitInstace } from "@/types";
 
 const AddActivity: React.FC = () => {
-  const selectedHabit = habitsStore.use.selectedHabit();
-  const selectedHabitFrequency = habitsStore.use.selectedHabitFrequency();
+  const navigate = useNavigate();
+  const [selectedHabit, setSelectedHabit] = useState<Habit | undefined>(
+    undefined
+  );
+  const [selectedHabitFrequency, setSelectedHabitFrequency] = useState<
+    "daily" | "weekly"
+  >("daily");
+  const dailyHabitsInstances = habitsStore.use.dailyHabitsInstances();
+  const currentDate = homeStore.use.currentDate();
+
+  const [habitValue, setHabitValue] = useState<string>("");
 
   const changeHabit = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const habit = habitList.find((habit) => habit.id === e.target.value);
+    const habit = habitList.find((habit) => habit.habit_id === e.target.value);
 
-    habitsStore.setState((state) => ({
-      ...state,
-      selectedHabit: habit,
-    }));
+    setSelectedHabit(habit);
   };
 
   const changeFrequency = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedHabitFrequency(e.target.value as "daily" | "weekly");
+  };
+
+  const submitHandler = (e: React.FormEvent) => {
+    e.preventDefault();
+    const payload: HabitInstace = {
+      created_on: currentDate,
+      habit: selectedHabit as Habit,
+      habit_id: selectedHabit?.habit_id || "",
+      habit_instance_id: `${selectedHabit?.habit_id}${selectedHabitFrequency}`,
+      habit_instance_threshold: habitValue,
+      is_active: true,
+    };
+
+    const dailyHabits = [...dailyHabitsInstances];
+    dailyHabits.push(payload);
+
     habitsStore.setState((state) => ({
       ...state,
-      selectedHabitFrequency: e.target.value as "daily" | "weekly",
+      dailyHabitsInstances: dailyHabits,
     }));
+
+    navigate(-1);
   };
 
   useEffect(() => {
-    habitsStore.setState((state) => ({
-      ...state,
-      selectedHabit: habitList[0],
-      selectedHabitFrequency: "daily",
-    }));
+    setSelectedHabit(habitList[0]);
+    setSelectedHabitFrequency("daily");
   }, []);
 
   return (
@@ -42,19 +68,23 @@ const AddActivity: React.FC = () => {
         Start Tracking
       </Heading>
       <Divider height="1rem" />
-      <form>
+      <form onSubmit={submitHandler}>
         <div className="w-full">
           <FormLabel>Select habit to track</FormLabel>
           <Divider />
           <select
-            value={selectedHabit?.id || ""}
+            value={selectedHabit?.habit_id || ""}
             onChange={changeHabit}
             className="w-full h-8 rounded-lg text-sm text-primary bg-black border border-yellow px-2"
           >
             {habitList.map((habit) => {
               return (
-                <option key={habit.id} className="capitalize" value={habit.id}>
-                  {habit.name}
+                <option
+                  key={habit.habit_id}
+                  className="capitalize"
+                  value={habit.habit_id}
+                >
+                  {habit.habit_name}
                 </option>
               );
             })}
@@ -97,16 +127,23 @@ const AddActivity: React.FC = () => {
         </div>
         <Divider height="2rem" />
         <div>
-          {selectedHabit?.valueRequired ? (
+          {selectedHabit?.habit_valueRequired ? (
             <div>
-              <FormLabel size="sm">{selectedHabit.valueText}</FormLabel>
+              <FormLabel size="sm" htmlFor="habitValue">
+                {selectedHabit.habit_valueText}
+              </FormLabel>
               <Divider />
               <div className="flex gap-x-2 items-end">
                 <input
-                  type="number"
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setHabitValue(e.target.value)
+                  }
+                  autoComplete="off"
+                  name="habitValue"
+                  value={habitValue}
                   className="w-full h-8 rounded-lg text-sm text-primary bg-black border border-yellow px-2"
                 />
-                <Text size="xs">{selectedHabit?.unit}</Text>
+                <Text size="xs">{selectedHabit?.habit_unit}</Text>
               </div>
             </div>
           ) : (
