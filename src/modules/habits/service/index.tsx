@@ -30,10 +30,10 @@ class HabitService {
     return HabitService.instance;
   }
 
-/**
- * function to create a new habit instance and create a tracker for it
- * @param args : CreateNewHabitInstanceDailyArgs
- */
+  /**
+   * function to create a new habit instance and create a tracker for it
+   * @param args : CreateNewHabitInstanceDailyArgs
+   */
   public createNewHabitInstanceDaily = (
     args: CreateNewHabitInstanceDailyArgs
   ) => {
@@ -45,6 +45,17 @@ class HabitService {
       }));
     } catch (err) {
       throw new Error("Failed to add new habit instance");
+    }
+  };
+
+  public createNewHabitTracker = (tracker: TrackedHabits[]) => {
+    try {
+      habitsStore.setState((state) => ({
+        ...state,
+        trackedHabits: tracker,
+      }));
+    } catch (err) {
+      throw new Error("Failed to add new habit tracker");
     }
   };
 }

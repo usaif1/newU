@@ -29,7 +29,7 @@ const Router: React.FC = () => {
           element: <AddHabit />,
         },
         {
-          path: "edit/:habitinstance", // Route with parameter
+          path: "edit/:habitinstanceid", // Route with parameter
           element: <EditHabit />,
         },
       ],

@@ -47,6 +47,7 @@ const Home: React.FC = () => {
         <Calendar />
       </div>
       <Divider height="1rem" />
+
       <div className="flex flex-col gap-y-3">
         {habitInstacesToShow.map((habitInstance) => (
           <HabitTrackerCard

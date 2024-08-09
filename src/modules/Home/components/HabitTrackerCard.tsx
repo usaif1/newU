@@ -39,7 +39,7 @@ const HabitTrackerCard: React.FC<HabitTrackerCardProps> = ({
 
   return (
     <Link
-      to="/"
+      to={`/habits/edit/${habitInstance?.habit_instance_id}`}
       className="w-full h-16 border border-gray-200 rounded-md px-4 pt-2"
     >
       <div className="flex items-center justify-between">
