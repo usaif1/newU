@@ -9,13 +9,7 @@ import { habitsStore, homeStore } from "@/global/stores";
 import { Divider, Heading, ScreenWrapper, Text } from "@/components";
 
 // types
-import {
-  Habit,
-  HabitInstace,
-  TrackedHabits,
-  // TrackedHabits,
-  // TrackedHabits
-} from "@/types";
+import { Habit, HabitInstace, TrackedHabits } from "@/types";
 import habitService from "../service";
 
 const EditActivity: React.FC = () => {
@@ -78,39 +72,41 @@ const EditActivity: React.FC = () => {
     }
 
     setHabitInstance(foundHabitInstance);
-    // setHabitTracker(foundHabit);
     setValue(foundHabit?.inputValue ?? 0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    const dateFilteredHabits = trackedHabits.filter((habit) => {
-      return habit.inputDay === currentDate;
-    });
-
-    const foundHabit = dateFilteredHabits.find((habit) => {
-      return habit.habitInstance_id === habitinstanceid;
-    });
-
-    if (foundHabit) {
-      const indexOfHabitTracker = trackedHabits.findIndex((habit) => {
-        return (
-          habit.habitInstance_id === foundHabit?.habitInstance_id &&
-          habit.inputDay === currentDate
-        );
+    if (value) {
+      const dateFilteredHabits = trackedHabits.filter((habit) => {
+        return habit.inputDay === currentDate;
       });
 
-      const orginalTrackedHabits = [...trackedHabits];
+      const foundHabit = dateFilteredHabits.find((habit) => {
+        return habit.habitInstance_id === habitinstanceid;
+      });
 
-      orginalTrackedHabits[indexOfHabitTracker] = {
-        ...orginalTrackedHabits[indexOfHabitTracker],
-        inputValue: value,
-      };
+      if (foundHabit) {
+        const indexOfHabitTracker = trackedHabits.findIndex((habit) => {
+          return (
+            habit.habitInstance_id === foundHabit?.habitInstance_id &&
+            habit.inputDay === currentDate
+          );
+        });
 
-      habitsStore.setState((state) => ({
-        ...state,
-        trackedHabits: orginalTrackedHabits,
-      }));
+        const orginalTrackedHabits = [...trackedHabits];
+
+        orginalTrackedHabits[indexOfHabitTracker] = {
+          ...orginalTrackedHabits[indexOfHabitTracker],
+          inputValue: value,
+          is_completed: value >= foundHabit?.requiredValue,
+        };
+
+        habitsStore.setState((state) => ({
+          ...state,
+          trackedHabits: orginalTrackedHabits,
+        }));
+      }
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
