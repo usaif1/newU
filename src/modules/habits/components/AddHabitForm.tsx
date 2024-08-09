@@ -38,12 +38,15 @@ const AddActivity: React.FC = () => {
 
   const submitHandler = (e: React.FormEvent) => {
     e.preventDefault();
+
     const payload: HabitInstace = {
       created_on: currentDate,
       habit: selectedHabit as Habit,
       habit_id: selectedHabit?.habit_id || "",
       habit_instance_id: `${selectedHabit?.habit_id}${selectedHabitFrequency}`,
-      habit_instance_threshold: habitValue,
+      habit_instance_threshold: selectedHabit?.habit_valueRequired
+        ? habitValue
+        : "",
       is_active: true,
       frequency: selectedHabitFrequency,
     };
@@ -77,6 +80,12 @@ const AddActivity: React.FC = () => {
   useEffect(() => {
     setSelectedHabit(habitList[0]);
     setSelectedHabitFrequency("daily");
+
+    return () => {
+      setSelectedHabit(undefined);
+      setSelectedHabitFrequency("daily");
+      setHabitValue("");
+    };
   }, []);
 
   return (

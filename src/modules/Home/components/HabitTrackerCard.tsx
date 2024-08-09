@@ -1,5 +1,5 @@
 // dependencies
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 // components
@@ -9,7 +9,7 @@ import { Divider, Text } from "@/components";
 import { habitsStore, homeStore } from "@/global/stores";
 
 // types
-import { HabitInstace } from "@/types";
+import { HabitInstace, TrackedHabits } from "@/types";
 
 type HabitTrackerCardProps = {
   habitInstance: HabitInstace;
@@ -21,9 +21,21 @@ const HabitTrackerCard: React.FC<HabitTrackerCardProps> = ({
   const currentDate = homeStore.use.currentDate();
   const trackedHabits = habitsStore.use.trackedHabits();
 
-  const todaysHabit = trackedHabits.find((trackedHabit) => {
-    return trackedHabit.inputDay === currentDate;
-  });
+  const [todaysHabit, setTodaysHabit] = React.useState<
+    TrackedHabits | undefined
+  >();
+
+  useEffect(() => {
+    const todaysHabits = trackedHabits.filter((trackedHabit) => {
+      return trackedHabit.inputDay === currentDate;
+    });
+
+    const foundHabit = todaysHabits.find((habit) => {
+      return habit.habit_id === habitInstance.habit_id;
+    });
+
+    setTodaysHabit(foundHabit);
+  }, [currentDate, habitInstance.habit_id, trackedHabits]);
 
   return (
     <Link

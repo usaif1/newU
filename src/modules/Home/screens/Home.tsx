@@ -1,8 +1,8 @@
 // depdenencies
-import React from "react";
+import React, { useEffect } from "react";
 
 // store
-import { habitsStore } from "@/global/stores";
+import { habitsStore, homeStore } from "@/global/stores";
 
 // components
 import {
@@ -13,21 +13,34 @@ import {
   Calendar,
 } from "@/components";
 import { HabitTrackerCard } from "../components";
+import { HabitInstace } from "@/types";
 
 const Home: React.FC = () => {
   const dailyHabitsInstances = habitsStore.use.dailyHabitsInstances();
   const weeklyHabitsInstances = habitsStore.use.weeklyHabitsInstances();
+  const currentDate = homeStore.use.currentDate();
 
-  const allHabitsInstances = [
-    ...dailyHabitsInstances,
-    ...weeklyHabitsInstances,
-  ];
-  // const trackedHabits = habitsStore.use.trackedHabits();
+  const [habitInstacesToShow, setHabitInstacesToShow] = React.useState<
+    HabitInstace[]
+  >([]);
+
+  useEffect(() => {
+    const allHabitsInstances = [
+      ...dailyHabitsInstances,
+      ...weeklyHabitsInstances,
+    ];
+
+    const filteredHabits = allHabitsInstances.filter((habitInstance) => {
+      return habitInstance.created_on <= currentDate;
+    });
+
+    setHabitInstacesToShow(filteredHabits);
+  }, [currentDate, dailyHabitsInstances, weeklyHabitsInstances]);
 
   return (
     <ScreenWrapper className="py-10">
       <Heading size="h6" align="center">
-        {allHabitsInstances.length ? "Dashboard" : "Welcome to Habit Tracker"}
+        {habitInstacesToShow.length ? "Dashboard" : "Welcome to Habit Tracker"}
       </Heading>
       <Divider height="1rem" />
       <div>
@@ -35,7 +48,7 @@ const Home: React.FC = () => {
       </div>
       <Divider height="1rem" />
       <div className="flex flex-col gap-y-3">
-        {allHabitsInstances.map((habitInstance) => (
+        {habitInstacesToShow.map((habitInstance) => (
           <HabitTrackerCard
             key={habitInstance.habit_instance_id}
             habitInstance={habitInstance}
@@ -48,7 +61,7 @@ const Home: React.FC = () => {
           to="/habits/add"
           className="border border-yellow rounded-lg px-4 py-2"
         >
-          {allHabitsInstances.length
+          {habitInstacesToShow.length
             ? "Track more habits"
             : "Start tracking habits"}
         </Anchor>
