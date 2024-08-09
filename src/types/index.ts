@@ -18,6 +18,7 @@ export type HabitInstace = {
   habit_instance_threshold: string; //threshold value for the to meet the streak
   created_on: string; //date when the habit instance was created
   is_active: boolean; //flag to check if the habit instance is active
+  frequency: "daily" | "weekly";
 };
 
 export type TrackedHabits = {
@@ -26,7 +27,7 @@ export type TrackedHabits = {
   habitInstance_id: string;
   habit: Habit;
   habit_id: string;
-  input_day: string;
+  inputDay: string;
   requiredValue: number;
   inputValue: number;
   frequency: "daily" | "weekly";
