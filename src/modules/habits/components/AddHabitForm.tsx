@@ -8,6 +8,9 @@ import { Divider, FormLabel, Text } from "@/components";
 // store
 import { homeStore, habitsStore } from "@/global/stores";
 
+// service
+import homeService from "../service";
+
 // data & types
 import { habitList } from "@/data/habits";
 import { Habit, HabitInstace, TrackedHabits } from "@/types";
@@ -68,11 +71,10 @@ const AddActivity: React.FC = () => {
       tracker_id: `${selectedHabit?.habit_id}${selectedHabitFrequency}${currentDate}`,
     };
 
-    habitsStore.setState((state) => ({
-      ...state,
-      dailyHabitsInstances: dailyHabits,
-      trackedHabits: [...state.trackedHabits, tracker],
-    }));
+    homeService.createNewHabitInstanceDaily({
+      dailyHabits: dailyHabits,
+      tracker: tracker,
+    });
 
     navigate(-1);
   };
