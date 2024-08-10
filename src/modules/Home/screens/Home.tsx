@@ -13,6 +13,8 @@ import {
   Calendar,
 } from "@/components";
 import { HabitTrackerCard } from "../components";
+
+// types
 import { HabitInstace } from "@/types";
 
 const Home: React.FC = () => {
@@ -31,10 +33,10 @@ const Home: React.FC = () => {
     ];
 
     const filteredHabits = allHabitsInstances.filter((habitInstance) => {
-      return habitInstance.created_on <= currentDate;
+      return habitInstance.created_on === currentDate;
     });
 
-    setHabitInstacesToShow(filteredHabits);
+    setHabitInstacesToShow(allHabitsInstances);
   }, [currentDate, dailyHabitsInstances, weeklyHabitsInstances]);
 
   return (

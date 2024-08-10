@@ -8,8 +8,11 @@ import { Divider, Text } from "@/components";
 // store
 import { habitsStore, homeStore } from "@/global/stores";
 
-// types
+// services
 import { HabitInstace, TrackedHabits } from "@/types";
+
+// types
+import habitService from "@/modules/habits/service";
 
 type HabitTrackerCardProps = {
   habitInstance: HabitInstace;
@@ -20,6 +23,7 @@ const HabitTrackerCard: React.FC<HabitTrackerCardProps> = ({
 }) => {
   const currentDate = homeStore.use.currentDate();
   const trackedHabits = habitsStore.use.trackedHabits();
+  const dailyStreak = habitsStore.use.dailyStreak();
 
   const [todaysHabit, setTodaysHabit] = React.useState<
     TrackedHabits | undefined
@@ -37,6 +41,13 @@ const HabitTrackerCard: React.FC<HabitTrackerCardProps> = ({
     setTodaysHabit(foundHabit);
   }, [currentDate, habitInstance.habit_id, trackedHabits]);
 
+  useEffect(() => {
+    habitService.getStreak({
+      date: currentDate,
+      habitInstaceId: habitInstance.habit_instance_id,
+    });
+  }, [currentDate]);
+
   return (
     <Link
       to={`/habits/edit/${habitInstance?.habit_instance_id}`}
@@ -44,7 +55,7 @@ const HabitTrackerCard: React.FC<HabitTrackerCardProps> = ({
     >
       <div className="flex items-center justify-between">
         <Text color="alternate" weight="text-600" size="xs">
-          {habitInstance?.habit?.habit_name}
+          {habitInstance?.habit?.habit_name} ( streak - {dailyStreak})
         </Text>
         <Text
           color="alternate"

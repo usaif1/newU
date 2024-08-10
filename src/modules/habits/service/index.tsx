@@ -6,7 +6,7 @@
 // dependencies
 
 // store
-import habitsStore from "../store";
+import { homeStore, habitsStore } from "@/global/stores";
 
 // types
 import { HabitInstace, TrackedHabits } from "@/types";
@@ -14,6 +14,11 @@ import { HabitInstace, TrackedHabits } from "@/types";
 type CreateNewHabitInstanceDailyArgs = {
   dailyHabits: HabitInstace[];
   tracker: TrackedHabits;
+};
+
+type GetStreakArgs = {
+  date: string;
+  habitInstaceId: string;
 };
 
 /**
@@ -57,6 +62,50 @@ class HabitService {
     } catch (err) {
       throw new Error("Failed to add new habit tracker");
     }
+  };
+
+  public getStreak = (args: GetStreakArgs) => {
+    const currentDate = homeStore.getState().currentDate;
+    const trackedHabits = habitsStore.getState().trackedHabits;
+
+    const trackedHabitsByDate = trackedHabits.filter((trackedHabit) => {
+      return trackedHabit.inputDay <= args.date;
+    });
+
+    const currentHabitTracker = trackedHabitsByDate.filter((habit) => {
+      return habit.habitInstance_id === args.habitInstaceId;
+    });
+
+    let streak = 0;
+
+    const startIndex = currentHabitTracker.length - 1;
+
+    for (let i = startIndex; i >= 0; i--) {
+      console.log("prev habit", currentHabitTracker[i - 1]);
+      if (currentHabitTracker[i - 1]?.is_completed) {
+        streak += 1;
+      } else {
+        streak = 0;
+      }
+    }
+
+    // currentHabitTracker.forEach((habit) => {
+    //   if (habit.is_completed) {
+    //     streak += 1;
+    //   } else {
+    //     streak = 0;
+    //   }
+    // });
+
+    habitsStore.setState((state) => ({
+      ...state,
+      dailyStreak: streak,
+    }));
+
+    console.log("currenDate", currentDate);
+    console.log("trackedHabits", trackedHabits);
+    console.log("trackedHabitsByDate", trackedHabitsByDate);
+    console.log("currentHabitTracker", currentHabitTracker);
   };
 }
 
