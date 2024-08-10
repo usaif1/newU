@@ -4,6 +4,7 @@
  */
 
 // dependencies
+import { DateTime } from "luxon";
 
 // store
 import { homeStore, habitsStore } from "@/global/stores";
@@ -67,45 +68,38 @@ class HabitService {
   public getStreak = (args: GetStreakArgs) => {
     const currentDate = homeStore.getState().currentDate;
     const trackedHabits = habitsStore.getState().trackedHabits;
-
     const trackedHabitsByDate = trackedHabits.filter((trackedHabit) => {
       return trackedHabit.inputDay <= args.date;
     });
-
     const currentHabitTracker = trackedHabitsByDate.filter((habit) => {
       return habit.habitInstance_id === args.habitInstaceId;
+    });
+    const sortedArr = currentHabitTracker.sort((a, b) => {
+      return Date.parse(a.inputDay) - Date.parse(b.inputDay);
     });
 
     let streak = 0;
 
-    const startIndex = currentHabitTracker.length - 1;
+    for (let i = sortedArr.length - 1; i >= 0; i--) {
+      if (sortedArr[i]?.inputDay === currentDate) {
+        continue;
+      }
 
-    for (let i = startIndex; i >= 0; i--) {
-      console.log("prev habit", currentHabitTracker[i - 1]);
-      if (currentHabitTracker[i - 1]?.is_completed) {
-        streak += 1;
+      if (sortedArr[i]?.is_completed) {
+        streak++;
       } else {
-        streak = 0;
+        break;
       }
     }
-
-    // currentHabitTracker.forEach((habit) => {
-    //   if (habit.is_completed) {
-    //     streak += 1;
-    //   } else {
-    //     streak = 0;
-    //   }
-    // });
-
-    habitsStore.setState((state) => ({
-      ...state,
-      dailyStreak: streak,
-    }));
 
     console.log("currenDate", currentDate);
     console.log("trackedHabits", trackedHabits);
     console.log("trackedHabitsByDate", trackedHabitsByDate);
     console.log("currentHabitTracker", currentHabitTracker);
+    console.log("sortedArr", sortedArr);
+
+    console.log("streak", streak);
+    return streak;
   };
 }
 

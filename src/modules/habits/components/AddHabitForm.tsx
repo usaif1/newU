@@ -9,7 +9,7 @@ import { Divider, FormLabel, Text } from "@/components";
 import { homeStore, habitsStore } from "@/global/stores";
 
 // service
-import homeService from "../service";
+import habitService from "../service";
 
 // data & types
 import { habitList } from "@/data/habits";
@@ -71,7 +71,7 @@ const AddActivity: React.FC = () => {
       tracker_id: `${selectedHabit?.habit_id}${selectedHabitFrequency}${currentDate}`,
     };
 
-    homeService.createNewHabitInstanceDaily({
+    habitService.createNewHabitInstanceDaily({
       dailyHabits: dailyHabits,
       tracker: tracker,
     });

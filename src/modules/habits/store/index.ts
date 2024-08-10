@@ -16,7 +16,7 @@ type HabitsState = {
   //tracking
   trackedHabits: TrackedHabits[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  dailyStreak: number;
+  dailyStreak: any[];
 };
 
 const HabitsInitialState: HabitsState = {
@@ -28,7 +28,7 @@ const HabitsInitialState: HabitsState = {
   trackedHabits: [],
 
   // streaks
-  dailyStreak: 0,
+  dailyStreak: [],
 };
 
 // actions
