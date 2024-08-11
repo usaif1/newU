@@ -1,5 +1,5 @@
 // dependencies
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 // components
@@ -8,8 +8,11 @@ import { Divider, Text } from "@/components";
 // store
 import { habitsStore, homeStore } from "@/global/stores";
 
-// types
+// services
 import { HabitInstace, TrackedHabits } from "@/types";
+
+// types
+import habitService from "@/modules/habits/service";
 
 type HabitTrackerCardProps = {
   habitInstance: HabitInstace;
@@ -24,6 +27,7 @@ const HabitTrackerCard: React.FC<HabitTrackerCardProps> = ({
   const [todaysHabit, setTodaysHabit] = React.useState<
     TrackedHabits | undefined
   >();
+  const [dailyStreak, setDailyStreak] = useState<number>(0);
 
   useEffect(() => {
     const todaysHabits = trackedHabits.filter((trackedHabit) => {
@@ -34,8 +38,42 @@ const HabitTrackerCard: React.FC<HabitTrackerCardProps> = ({
       return habit.habit_id === habitInstance.habit_id;
     });
 
-    setTodaysHabit(foundHabit);
-  }, [currentDate, habitInstance.habit_id, trackedHabits]);
+    console.log("foundHabit", foundHabit);
+    if (!foundHabit) {
+      const tracker: TrackedHabits = {
+        frequency: habitInstance?.frequency,
+        habit: habitInstance?.habit,
+        habit_id: habitInstance?.habit_id || "",
+        habitInstance: habitInstance,
+        habitInstance_id: habitInstance.habit_instance_id,
+        inputDay: currentDate,
+        inputValue: 0,
+        is_completed: false,
+        requiredValue: Number(habitInstance?.habit_instance_threshold),
+        streak: 0,
+        tracker_id: `${habitInstance?.habit_id}${habitInstance?.frequency}${currentDate}`,
+      };
+
+      habitsStore.setState((state) => ({
+        ...state,
+        trackedHabits: [...state.trackedHabits, tracker],
+      }));
+
+      setTodaysHabit(tracker);
+    } else {
+      setTodaysHabit(foundHabit);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentDate, trackedHabits]);
+
+  useEffect(() => {
+    const calculatedStreak = habitService.getStreak({
+      date: currentDate,
+      habitInstaceId: habitInstance.habit_instance_id,
+    });
+
+    setDailyStreak(calculatedStreak);
+  }, [currentDate]);
 
   return (
     <Link
@@ -44,7 +82,7 @@ const HabitTrackerCard: React.FC<HabitTrackerCardProps> = ({
     >
       <div className="flex items-center justify-between">
         <Text color="alternate" weight="text-600" size="xs">
-          {habitInstance?.habit?.habit_name}
+          {habitInstance?.habit?.habit_name} (streak - {dailyStreak} )
         </Text>
         <Text
           color="alternate"

@@ -112,8 +112,6 @@ const EditActivity: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
-  console.log("trackedHabits", trackedHabits);
-
   return (
     <ScreenWrapper className="py-10">
       <Heading size="h6" align="center">

@@ -4,9 +4,10 @@
  */
 
 // dependencies
+import { DateTime } from "luxon";
 
 // store
-import habitsStore from "../store";
+import { homeStore, habitsStore } from "@/global/stores";
 
 // types
 import { HabitInstace, TrackedHabits } from "@/types";
@@ -14,6 +15,11 @@ import { HabitInstace, TrackedHabits } from "@/types";
 type CreateNewHabitInstanceDailyArgs = {
   dailyHabits: HabitInstace[];
   tracker: TrackedHabits;
+};
+
+type GetStreakArgs = {
+  date: string;
+  habitInstaceId: string;
 };
 
 /**
@@ -57,6 +63,43 @@ class HabitService {
     } catch (err) {
       throw new Error("Failed to add new habit tracker");
     }
+  };
+
+  public getStreak = (args: GetStreakArgs) => {
+    const currentDate = homeStore.getState().currentDate;
+    const trackedHabits = habitsStore.getState().trackedHabits;
+    const trackedHabitsByDate = trackedHabits.filter((trackedHabit) => {
+      return trackedHabit.inputDay <= args.date;
+    });
+    const currentHabitTracker = trackedHabitsByDate.filter((habit) => {
+      return habit.habitInstance_id === args.habitInstaceId;
+    });
+    const sortedArr = currentHabitTracker.sort((a, b) => {
+      return Date.parse(a.inputDay) - Date.parse(b.inputDay);
+    });
+
+    let streak = 0;
+
+    for (let i = sortedArr.length - 1; i >= 0; i--) {
+      if (sortedArr[i]?.inputDay === currentDate) {
+        continue;
+      }
+
+      if (sortedArr[i]?.is_completed) {
+        streak++;
+      } else {
+        break;
+      }
+    }
+
+    console.log("currenDate", currentDate);
+    console.log("trackedHabits", trackedHabits);
+    console.log("trackedHabitsByDate", trackedHabitsByDate);
+    console.log("currentHabitTracker", currentHabitTracker);
+    console.log("sortedArr", sortedArr);
+
+    console.log("streak", streak);
+    return streak;
   };
 }
 
