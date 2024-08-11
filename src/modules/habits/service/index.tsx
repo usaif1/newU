@@ -3,9 +3,6 @@
  * @description This module contains the service file for the Habit module.
  */
 
-// dependencies
-import { DateTime } from "luxon";
-
 // store
 import { homeStore, habitsStore } from "@/global/stores";
 
