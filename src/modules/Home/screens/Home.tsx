@@ -27,16 +27,7 @@ const Home: React.FC = () => {
   >([]);
 
   useEffect(() => {
-    const allHabitsInstances = [
-      ...dailyHabitsInstances,
-      ...weeklyHabitsInstances,
-    ];
-
-    const filteredHabits = allHabitsInstances.filter((habitInstance) => {
-      return habitInstance.created_on === currentDate;
-    });
-
-    setHabitInstacesToShow(allHabitsInstances);
+    setHabitInstacesToShow([...dailyHabitsInstances, ...weeklyHabitsInstances]);
   }, [currentDate, dailyHabitsInstances, weeklyHabitsInstances]);
 
   return (

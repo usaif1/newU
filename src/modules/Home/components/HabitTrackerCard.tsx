@@ -73,6 +73,7 @@ const HabitTrackerCard: React.FC<HabitTrackerCardProps> = ({
     });
 
     setDailyStreak(calculatedStreak);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentDate]);
 
   return (

@@ -20,8 +20,8 @@ const EditActivity: React.FC = () => {
   const dailyHabitsInstances = habitsStore.use.dailyHabitsInstances();
 
   const [habitInstance, setHabitInstance] = useState<HabitInstace | null>();
-
   const [value, setValue] = useState<number>(0);
+  const [boolValue, setBoolValue] = useState<boolean>(false);
 
   const onClick = useCallback((type: "add" | "subtract") => {
     if (type === "add") {
@@ -35,6 +35,40 @@ const EditActivity: React.FC = () => {
       });
     }
   }, []);
+
+  const onClickBool = (is_completed: boolean) => {
+    setBoolValue(is_completed);
+
+    const dateFilteredHabits = trackedHabits.filter((habit) => {
+      return habit.inputDay === currentDate;
+    });
+
+    const foundHabit = dateFilteredHabits.find((habit) => {
+      return habit.habitInstance_id === habitinstanceid;
+    });
+
+    if (foundHabit) {
+      const indexOfHabitTracker = trackedHabits.findIndex((habit) => {
+        return (
+          habit.habitInstance_id === foundHabit?.habitInstance_id &&
+          habit.inputDay === currentDate
+        );
+      });
+
+      const orginalTrackedHabits = [...trackedHabits];
+
+      orginalTrackedHabits[indexOfHabitTracker] = {
+        ...orginalTrackedHabits[indexOfHabitTracker],
+        inputValue: 0,
+        is_completed: is_completed,
+      };
+
+      habitsStore.setState((state) => ({
+        ...state,
+        trackedHabits: orginalTrackedHabits,
+      }));
+    }
+  };
 
   useEffect(() => {
     const foundHabitInstance = dailyHabitsInstances.find((habit) => {
@@ -158,7 +192,28 @@ const EditActivity: React.FC = () => {
             </div>
           </div>
         ) : (
-          <div>radio btn</div>
+          <div>
+            <Text>Did you perform {habitInstance?.habit.habit_name}?</Text>
+            <Divider />
+            <div className="w-full flex items-center gap-x-4">
+              <button
+                onClick={() => onClickBool(true)}
+                className={`w-20 border ${
+                  boolValue ? "border-yellow bg-lightorange" : "border-offwhite"
+                }  text-primary flex justify-center rounded-md`}
+              >
+                Yes
+              </button>
+              <button
+                onClick={() => onClickBool(false)}
+                className={`w-20 border ${
+                  !boolValue ? "border-yellow bg-lightorange" : "border-offwhite"
+                }  text-primary flex justify-center rounded-md`}
+              >
+                No
+              </button>
+            </div>
+          </div>
         )}
       </div>
     </ScreenWrapper>

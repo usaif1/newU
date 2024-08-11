@@ -39,8 +39,20 @@ const AddActivity: React.FC = () => {
     setSelectedHabitFrequency(e.target.value as "daily" | "weekly");
   };
 
+  const checkIfHabitInstanceExists = () => {
+    const habitInstance = dailyHabitsInstances.find((instance) => {
+      return instance.habit_id === selectedHabit?.habit_id;
+    });
+
+    if (habitInstance) return true;
+
+    return false;
+  };
+
   const submitHandler = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (checkIfHabitInstanceExists()) return alert("Habit alreay added");
 
     const payload: HabitInstace = {
       created_on: currentDate,
