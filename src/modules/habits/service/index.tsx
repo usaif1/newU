@@ -142,34 +142,39 @@ class HabitService {
 
   public getWeeklyStreakBool = (args: GetWeeklyStreakArgs) => {
     const currentDate = homeStore.getState().currentDate;
+    const trackedHabits = habitsStore.getState().trackedHabits;
 
     const mondaysArr: TrackedHabits[] = [];
 
-    const trackedHabits = habitsStore.getState().trackedHabits;
-    const trackedHabitsByDate = trackedHabits.filter((trackedHabit) => {
-      return trackedHabit.inputDay <= args.date;
-    });
+    // Filter and sort tracked habits to calculate streak
+    const sortedArr = trackedHabits
+      .filter(
+        (habit) =>
+          habit.inputDay <= args.date &&
+          habit.habitInstance_id === args.habitInstaceId
+      )
+      .sort((a, b) => Date.parse(a.inputDay) - Date.parse(b.inputDay));
 
-    const currentHabitTracker = trackedHabitsByDate.filter((habit) => {
-      return habit.habitInstance_id === args.habitInstaceId;
-    });
+    let found = false;
 
-    const sortedArr = currentHabitTracker.sort((a, b) => {
-      return Date.parse(a.inputDay) - Date.parse(b.inputDay);
-    });
+    for (let j = 0; j < sortedArr.length && !found; j++) {
+      const currentEntry = sortedArr[j];
 
-    for (let j = 0; j < sortedArr.length; j++) {
-      const isValueMonday = this.checkMonday(sortedArr[j]?.inputDay);
-      if (!isValueMonday) continue;
+      if (!this.checkMonday(currentEntry?.inputDay)) {
+        continue;
+      }
 
-      for (let i = j - 1; i >= Math.max(0, j - 7); i--) {
-        if (sortedArr[i].inputDay === currentDate) {
+      for (let i = j - 1; i >= Math.max(0, j - 7) && !found; i--) {
+        const previousEntry = sortedArr[i];
+
+        if (previousEntry.inputDay === currentDate) {
           continue;
         }
 
-        if (sortedArr[i]?.is_completed) {
-          mondaysArr.push(sortedArr[i]);
-          break;
+        if (previousEntry?.is_completed) {
+          mondaysArr.push(previousEntry);
+          found = true; // Set flag to break outer loop
+          break; // Break the inner loop
         }
       }
     }

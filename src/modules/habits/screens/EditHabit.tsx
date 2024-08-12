@@ -1,6 +1,6 @@
 // dependencies
 import React, { useCallback, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 // store
 import { habitsStore, homeStore } from "@/global/stores";
@@ -14,6 +14,7 @@ import habitService from "../service";
 
 const EditActivity: React.FC = () => {
   const { habitinstanceid } = useParams();
+  const navigate = useNavigate();
 
   const currentDate = homeStore.use.currentDate();
   const trackedHabits = habitsStore.use.trackedHabits();
@@ -225,6 +226,16 @@ const EditActivity: React.FC = () => {
             </div>
           </div>
         )}
+        <div className="w-full absolute bottom-32 left-0 flex justify-center">
+          <button
+            onClick={() => navigate(-1)}
+            className="w-20 h-10 text-center border border-yellow text-primary rounded-lg
+          hover:bg-yellow hover:text-black hover:font-medium
+          "
+          >
+            Done
+          </button>
+        </div>
       </div>
     </ScreenWrapper>
   );
