@@ -96,24 +96,14 @@ class HabitService {
       }
     }
 
-    // console.log("currenDate", currentDate);
-    // console.log("trackedHabits", trackedHabits);
-    // console.log("trackedHabitsByDate", trackedHabitsByDate);
-    // console.log("currentHabitTracker", currentHabitTracker);
-    // console.log("sortedArr", sortedArr);
-
-    // console.log("streak", streak);
     return streak;
   };
 
   public getWeeklyStreak = (args: GetWeeklyStreakArgs) => {
     const currentDate = homeStore.getState().currentDate;
-    const isMonday = this.checkMonday(currentDate);
 
     const mondaysArr: TrackedHabits[] = [];
 
-    // if !Monday, we do not need to check weekly streak
-    // if (!isMonday) return 0;
     const trackedHabits = habitsStore.getState().trackedHabits;
     const trackedHabitsByDate = trackedHabits.filter((trackedHabit) => {
       return trackedHabit.inputDay <= args.date;
@@ -128,7 +118,6 @@ class HabitService {
     });
 
     for (let j = 0; j < sortedArr.length; j++) {
-      // debugger;
       const isValueMonday = this.checkMonday(sortedArr[j]?.inputDay);
       if (!isValueMonday) continue;
 
@@ -143,121 +132,49 @@ class HabitService {
         }
       }
 
-      console.log("cumulative val", cumulative);
-      console.log("sortedArr[j]?.requiredValue", sortedArr[j]?.requiredValue);
-
       if (cumulative >= sortedArr[j]?.requiredValue) {
         mondaysArr.push(sortedArr[j]);
       }
     }
 
-    console.log("mondaysArr", mondaysArr);
     return mondaysArr.length;
+  };
 
-    // !working
-    // // sort tracked habits in increasing order
+  public getWeeklyStreakBool = (args: GetWeeklyStreakArgs) => {
+    const currentDate = homeStore.getState().currentDate;
 
-    // console.log("sortedArr", sortedArr);
+    const mondaysArr: TrackedHabits[] = [];
 
-    // const stop = Math.max(0, sortedArr.length - 1 - 7);
+    const trackedHabits = habitsStore.getState().trackedHabits;
+    const trackedHabitsByDate = trackedHabits.filter((trackedHabit) => {
+      return trackedHabit.inputDay <= args.date;
+    });
 
-    // let mondayCumulative = 0;
+    const currentHabitTracker = trackedHabitsByDate.filter((habit) => {
+      return habit.habitInstance_id === args.habitInstaceId;
+    });
 
-    // for (let i = sortedArr.length - 1; i >= stop; i--) {
-    //   console.log("sortedArr[i]", sortedArr[i]);
-    // if (sortedArr[i].inputDay === currentDate) {
-    //   continue;
-    // } else {
-    //   mondayCumulative += sortedArr[i].inputValue;
-    // }
-    // }
+    const sortedArr = currentHabitTracker.sort((a, b) => {
+      return Date.parse(a.inputDay) - Date.parse(b.inputDay);
+    });
 
-    // console.log("monday cumulative", mondayCumulative);
+    for (let j = 0; j < sortedArr.length; j++) {
+      const isValueMonday = this.checkMonday(sortedArr[j]?.inputDay);
+      if (!isValueMonday) continue;
 
-    // const foundHabit = sortedArr.find((habit) => {
-    //   return habit.inputDay === currentDate;
-    // });
+      for (let i = j - 1; i >= Math.max(0, j - 7); i--) {
+        if (sortedArr[i].inputDay === currentDate) {
+          continue;
+        }
 
-    // const foundHabitIndex = sortedArr.findIndex((habit) => {
-    //   return (
-    //     habit.inputDay === currentDate &&
-    //     habit.habitInstance_id === args.habitInstaceId
-    //   );
-    // });
+        if (sortedArr[i]?.is_completed) {
+          mondaysArr.push(sortedArr[i]);
+          break;
+        }
+      }
+    }
 
-    // const orginalTrackedHabits = [...sortedArr];
-
-    // orginalTrackedHabits[foundHabitIndex] = {
-    //   ...orginalTrackedHabits[foundHabitIndex],
-    //   inputValue: 0,
-    //   cumulative: mondayCumulative,
-    // };
-
-    // console.log("foundHabit monday", foundHabit);
-
-    // const foundMondaysArr = [];
-
-    // if (foundHabit) {
-    //   if (mondayCumulative >= foundHabit?.requiredValue) {
-    //     foundMondaysArr.push(foundHabit);
-    //   }
-    // }
-
-    // console.log("mondays length", foundMondaysArr.length);
-
-    // return foundMondaysArr.length;
-    // !working
-
-    // step 1 - check all cumulative values at beginning of the day ( Monday )
-    // step 2 - get all mondays from the list of tracked habit
-    // check streak at each monday
-
-    // if (!isMonday) return 0;
-
-    // // Ensure that we do not go beyond the start of the array
-    // const stop = Math.max(0, sortedArr.length - 1 - 7);
-
-    // let inputValueSum = 0;
-
-    // for (let i = sortedArr.length - 1; i >= stop; i--) {
-    //   if (sortedArr[i]?.inputDay === currentDate) {
-    //     continue;
-    //   }
-
-    //   inputValueSum += sortedArr[i]?.inputValue;
-    // }
-
-    // return inputValueSum;
-
-    // const weeks = this.groupByWeek(data);
-    // let streakCount = 0;
-
-    // Object.keys(weeks).forEach((weekStart, index, weekKeys) => {
-    //   const weekEntries = weeks[weekStart];
-
-    //   // Calculate the total input value for the week
-    //   const weekTotal = weekEntries.reduce(
-    //     (sum, entry) => sum + entry.inputValue,
-    //     0
-    //   );
-
-    //   // If the week total meets the weekly threshold
-    //   if (weekTotal >= weeklyThreshold) {
-    //     // Ensure that the streak is counted on the next Monday (start of next week)
-    //     if (index + 1 < weekKeys.length) {
-    //       const nextWeekStart = DateTime.fromISO(weekKeys[index + 1]);
-    //       const nextMonday = nextWeekStart.startOf("week").plus({ days: 1 });
-
-    //       // Only count the streak once per week
-    //       streakCount++;
-
-    //       // Log the streak count date for clarity
-    //       console.log("Streak counted on:", nextMonday.toISODate());
-    //     }
-    //   }
-    // });
-
-    // return streakCount;
+    return mondaysArr.length;
   };
 
   private checkMonday = (dateString: string): boolean => {

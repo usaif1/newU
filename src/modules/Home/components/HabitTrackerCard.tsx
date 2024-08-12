@@ -79,12 +79,21 @@ const HabitTrackerCard: React.FC<HabitTrackerCardProps> = ({
 
     setDailyStreak(calculatedStreak);
 
-    const weeklyStreak = habitService.getWeeklyStreak({
-      date: currentDate,
-      habitInstaceId: habitInstance.habit_instance_id,
-    });
+    if (habitInstance.habit_instance_threshold) {
+      const weeklyStreak = habitService.getWeeklyStreak({
+        date: currentDate,
+        habitInstaceId: habitInstance.habit_instance_id,
+      });
 
-    setWeeklyStreak(weeklyStreak);
+      setWeeklyStreak(weeklyStreak);
+    } else {
+      const weeklyStreak = habitService.getWeeklyStreakBool({
+        date: currentDate,
+        habitInstaceId: habitInstance.habit_instance_id,
+      });
+
+      setWeeklyStreak(weeklyStreak);
+    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentDate]);
