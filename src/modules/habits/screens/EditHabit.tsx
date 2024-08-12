@@ -98,6 +98,8 @@ const EditActivity: React.FC = () => {
         requiredValue: Number(foundHabitInstance?.habit_instance_threshold),
         streak: 0,
         tracker_id: `${foundHabitInstance?.habit_id}${foundHabitInstance?.frequency}${currentDate}`,
+        cumulative:
+          dateFilteredHabits[dateFilteredHabits.length - 1]?.cumulative || 0,
       };
 
       origingalTracker.push(tracker);
@@ -120,6 +122,10 @@ const EditActivity: React.FC = () => {
         return habit.habitInstance_id === habitinstanceid;
       });
 
+      const indexOfFoundHabit = trackedHabits.findIndex((habit) => {
+        return habit.tracker_id === foundHabit?.tracker_id;
+      });
+
       if (foundHabit) {
         const indexOfHabitTracker = trackedHabits.findIndex((habit) => {
           return (
@@ -134,6 +140,8 @@ const EditActivity: React.FC = () => {
           ...orginalTrackedHabits[indexOfHabitTracker],
           inputValue: value,
           is_completed: value >= foundHabit?.requiredValue,
+          cumulative:
+            value + (trackedHabits[indexOfFoundHabit - 1]?.cumulative || 0),
         };
 
         habitsStore.setState((state) => ({
@@ -207,7 +215,9 @@ const EditActivity: React.FC = () => {
               <button
                 onClick={() => onClickBool(false)}
                 className={`w-20 border ${
-                  !boolValue ? "border-yellow bg-lightorange" : "border-offwhite"
+                  !boolValue
+                    ? "border-yellow bg-lightorange"
+                    : "border-offwhite"
                 }  text-primary flex justify-center rounded-md`}
               >
                 No

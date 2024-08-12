@@ -28,6 +28,7 @@ const HabitTrackerCard: React.FC<HabitTrackerCardProps> = ({
     TrackedHabits | undefined
   >();
   const [dailyStreak, setDailyStreak] = useState<number>(0);
+  const [weeklyStreak, setWeeklyStreak] = useState<number>(0);
 
   useEffect(() => {
     const todaysHabits = trackedHabits.filter((trackedHabit) => {
@@ -52,6 +53,7 @@ const HabitTrackerCard: React.FC<HabitTrackerCardProps> = ({
         requiredValue: Number(habitInstance?.habit_instance_threshold),
         streak: 0,
         tracker_id: `${habitInstance?.habit_id}${habitInstance?.frequency}${currentDate}`,
+        cumulative: trackedHabits[trackedHabits.length - 1]?.cumulative || 0,
       };
 
       habitsStore.setState((state) => ({
@@ -63,6 +65,9 @@ const HabitTrackerCard: React.FC<HabitTrackerCardProps> = ({
     } else {
       setTodaysHabit(foundHabit);
     }
+
+    console.log("cumulative", foundHabit?.cumulative);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentDate, trackedHabits]);
 
@@ -73,6 +78,14 @@ const HabitTrackerCard: React.FC<HabitTrackerCardProps> = ({
     });
 
     setDailyStreak(calculatedStreak);
+
+    const weeklyStreak = habitService.getWeeklyStreak({
+      date: currentDate,
+      habitInstaceId: habitInstance.habit_instance_id,
+    });
+
+    setWeeklyStreak(weeklyStreak);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentDate]);
 
@@ -82,9 +95,16 @@ const HabitTrackerCard: React.FC<HabitTrackerCardProps> = ({
       className="w-full h-16 border border-gray-200 rounded-md px-4 pt-2"
     >
       <div className="flex items-center justify-between">
-        <Text color="alternate" weight="text-600" size="xs">
-          {habitInstance?.habit?.habit_name} (streak - {dailyStreak} )
-        </Text>
+        <div className="flex items-center gap-x-2">
+          <Text color="alternate" weight="text-600" size="xs">
+            {habitInstance?.habit?.habit_name}
+          </Text>
+          <Text color="alternate" weight="text-600" size="xs">
+            {habitInstance?.frequency === "daily"
+              ? `(daily streak -> ${dailyStreak})`
+              : `(weekly streak -> ${weeklyStreak})`}
+          </Text>
+        </div>
         <Text
           color="alternate"
           weight="text-500"

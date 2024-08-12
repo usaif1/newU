@@ -51,6 +51,15 @@ const Calendar: React.FC = () => {
                 {DateTime.fromISO(date.date).toFormat("LLL yy")}
               </Text>
             </div>
+            <div>
+              <Text
+                size="xxs"
+                weight="text-400"
+                color={currentDate === date.date ? "dark" : "primary"}
+              >
+                ({DateTime.fromISO(date.date).toFormat("EEE")})
+              </Text>
+            </div>
           </button>
         ))}
       </div>
