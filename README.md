@@ -1,30 +1,21 @@
-# React + TypeScript + Vite
+Habit Tracker App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Steps to run - 
+clone repository
+run command - `npm install`
+run command - `npm run dev`
 
-Currently, two official plugins are available:
+About - 
+An app to track user habits
+A user can add a habit with either daily or weekly tracking. Steps - 
+- select a habit
+- select frequency (daily/weekly)
+- select number of times habit must be tracked ( habit value )
+NOTE: some habits can be tracked on basis of completion only ( completed or not completed )
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+A calendar view is given to change the current date and habit cards are provided to display streak with tracking frequency
 
-## Expanding the ESLint configuration
+Clicking on habit card takes user on the habit details where user can either set the value of the habit for that current day or edit the habit value
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+NOTE - for streaks functionality to properly work, days must be navigated without skipping the days when moving forward in the calendar as the habit must be tracked daily ( to emulate real life behaviour where user can't skip a day )
 
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json', './tsconfig.app.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
