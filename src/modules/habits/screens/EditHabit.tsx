@@ -6,7 +6,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { habitsStore, homeStore } from "@/global/stores";
 
 // components
-import { Divider, Heading, ScreenWrapper, Text } from "@/components";
+import { Divider, FormLabel, Heading, ScreenWrapper, Text } from "@/components";
 
 // types
 import { Habit, HabitInstace, TrackedHabits } from "@/types";
@@ -23,6 +23,7 @@ const EditActivity: React.FC = () => {
   const [habitInstance, setHabitInstance] = useState<HabitInstace | null>();
   const [value, setValue] = useState<number>(0);
   const [boolValue, setBoolValue] = useState<boolean>(false);
+  const [valueToEdit, setValueToEdit] = useState<string>("");
 
   const onClick = useCallback((type: "add" | "subtract") => {
     if (type === "add") {
@@ -71,6 +72,10 @@ const EditActivity: React.FC = () => {
     }
   };
 
+  const valueEditHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValueToEdit(e.target.value);
+  };
+
   useEffect(() => {
     const foundHabitInstance = dailyHabitsInstances.find((habit) => {
       return habit.habit_instance_id === habitinstanceid;
@@ -83,6 +88,8 @@ const EditActivity: React.FC = () => {
     const foundHabit = dateFilteredHabits.find((habit) => {
       return habit.habitInstance_id === habitinstanceid;
     });
+
+    setValueToEdit(`${foundHabit?.requiredValue}`);
 
     if (!foundHabit) {
       const origingalTracker = [...trackedHabits];
@@ -155,6 +162,58 @@ const EditActivity: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
+  useEffect(() => {
+    if (valueToEdit) {
+      const dateFilteredHabits = trackedHabits.filter((habit) => {
+        return habit.inputDay === currentDate;
+      });
+
+      const foundHabit = dateFilteredHabits.find((habit) => {
+        return habit.habitInstance_id === habitinstanceid;
+      });
+
+      if (foundHabit) {
+        const indexOfHabitTracker = trackedHabits.findIndex((habit) => {
+          return (
+            habit.habitInstance_id === foundHabit?.habitInstance_id &&
+            habit.inputDay === currentDate
+          );
+        });
+
+        const orginalTrackedHabits = [...trackedHabits];
+
+        orginalTrackedHabits[indexOfHabitTracker] = {
+          ...orginalTrackedHabits[indexOfHabitTracker],
+          requiredValue: parseInt(valueToEdit),
+        };
+
+        habitsStore.setState((state) => ({
+          ...state,
+          trackedHabits: orginalTrackedHabits,
+        }));
+
+        const foundHabitInstanceIndex = dailyHabitsInstances.findIndex(
+          (habitInstance) => {
+            return habitInstance.habit_instance_id === habitinstanceid;
+          }
+        );
+
+        const originalHabitInstances = [...dailyHabitsInstances];
+
+        originalHabitInstances[foundHabitInstanceIndex] = {
+          ...originalHabitInstances[foundHabitInstanceIndex],
+          habit_instance_threshold: `${valueToEdit}`,
+        };
+
+        habitsStore.setState((state) => ({
+          ...state,
+          dailyHabitsInstances: originalHabitInstances,
+        }));
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [valueToEdit]);
+
   return (
     <ScreenWrapper className="py-10">
       <Heading size="h6" align="center">
@@ -226,6 +285,27 @@ const EditActivity: React.FC = () => {
             </div>
           </div>
         )}
+        {/* edit threshold */}
+        <Divider height="6rem" />
+        <div>
+          <FormLabel size="sm" htmlFor="habitValue">
+            Edit required value
+          </FormLabel>
+          <Divider />
+          <div className="flex gap-x-2 items-end">
+            <input
+              onChange={valueEditHandler}
+              type="number"
+              autoComplete="off"
+              name="habitValue"
+              value={valueToEdit}
+              className="w-full h-8 rounded-lg text-sm text-primary bg-black border border-yellow px-2"
+            />
+            <Text size="xs">{habitInstance?.habit?.habit_unit}</Text>
+          </div>
+        </div>
+
+        {/* add button */}
         <div className="w-full absolute bottom-32 left-0 flex justify-center">
           <button
             onClick={() => navigate(-1)}
