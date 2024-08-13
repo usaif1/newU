@@ -162,25 +162,22 @@ class HabitService {
       )
       .sort((a, b) => Date.parse(a.inputDay) - Date.parse(b.inputDay));
 
-    let found = false;
-
-    for (let j = 0; j < sortedArr.length && !found; j++) {
+    for (let j = 0; j < sortedArr.length; j++) {
       const currentEntry = sortedArr[j];
 
       if (!this.checkMonday(currentEntry?.inputDay)) {
         continue;
       }
 
-      for (let i = j - 1; i >= Math.max(0, j - 7) && !found; i--) {
+      for (let i = j - 1; i >= Math.max(0, j - 7); i--) {
         const previousEntry = sortedArr[i];
 
         if (previousEntry.inputDay === currentDate) {
           continue;
         }
-
+        console.log("previousEntry", previousEntry);
         if (previousEntry?.is_completed) {
           mondaysArr.push(previousEntry);
-          found = true; // Set flag to break outer loop
           break; // Break the inner loop
         }
       }

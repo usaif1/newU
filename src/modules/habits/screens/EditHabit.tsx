@@ -85,6 +85,7 @@ const EditActivity: React.FC = () => {
 
   // function to edit habit threshold
   const valueEditHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log();
     setValueToEdit(e.target.value);
   };
 
@@ -309,24 +310,29 @@ const EditActivity: React.FC = () => {
           </div>
         )}
         {/* edit threshold */}
-        <Divider height="6rem" />
-        <div>
-          <FormLabel size="sm" htmlFor="habitValue">
-            Edit required value
-          </FormLabel>
-          <Divider />
-          <div className="flex gap-x-2 items-end">
-            <input
-              onChange={valueEditHandler}
-              type="number"
-              autoComplete="off"
-              name="habitValue"
-              value={valueToEdit}
-              className="w-full h-8 rounded-lg text-sm text-primary bg-black border border-yellow px-2"
-            />
-            <Text size="xs">{habitInstance?.habit?.habit_unit}</Text>
-          </div>
-        </div>
+        {habitInstance?.habit_instance_threshold &&
+        parseInt(habitInstance?.habit_instance_threshold) > 0 ? (
+          <>
+            <Divider height="6rem" />
+            <div>
+              <FormLabel size="sm" htmlFor="habitValue">
+                Edit required value
+              </FormLabel>
+              <Divider />
+              <div className="flex gap-x-2 items-end">
+                <input
+                  onChange={valueEditHandler}
+                  type="number"
+                  autoComplete="off"
+                  name="habitValue"
+                  value={valueToEdit}
+                  className="w-full h-8 rounded-lg text-sm text-primary bg-black border border-yellow px-2"
+                />
+                <Text size="xs">{habitInstance?.habit?.habit_unit}</Text>
+              </div>
+            </div>
+          </>
+        ) : null}
 
         {/* add button */}
         <div className="w-full absolute bottom-32 left-0 flex justify-center">
