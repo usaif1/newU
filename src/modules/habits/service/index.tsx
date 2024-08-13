@@ -124,7 +124,6 @@ class HabitService {
       let cumulative = 0;
 
       for (let i = j - 1; i >= Math.max(0, j - 7); i--) {
-        console.log("sortedArr[i]", sortedArr[i]);
         if (sortedArr[i].inputDay === currentDate) {
           continue;
         } else {

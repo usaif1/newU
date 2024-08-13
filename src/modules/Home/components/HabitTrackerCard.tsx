@@ -39,7 +39,6 @@ const HabitTrackerCard: React.FC<HabitTrackerCardProps> = ({
       return habit.habit_id === habitInstance.habit_id;
     });
 
-    console.log("foundHabit", foundHabit);
     if (!foundHabit) {
       const tracker: TrackedHabits = {
         frequency: habitInstance?.frequency,
@@ -65,8 +64,6 @@ const HabitTrackerCard: React.FC<HabitTrackerCardProps> = ({
     } else {
       setTodaysHabit(foundHabit);
     }
-
-    console.log("cumulative", foundHabit?.cumulative);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentDate, trackedHabits]);
