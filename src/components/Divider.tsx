@@ -1,3 +1,8 @@
+/**
+ * The Divider component is a simple React functional component that renders a horizontal or vertical divider with customizable width and height.
+ * Used to separate content in a layout.
+ */
+
 // dependencies
 import React from "react";
 

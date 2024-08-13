@@ -6,7 +6,7 @@ import createSelectors from "@/utils/selectors";
 
 // state
 type HomeState = {
-  currentDate: string;
+  currentDate: string; // current date selected by the user
 };
 
 const HabitsInitialState: HomeState = {

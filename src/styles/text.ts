@@ -1,3 +1,8 @@
+/**
+ * The text.ts file contains enums and types that define the color, size, and weight of text elements used throughout the application.
+ * These enums and types help maintain consistency in text styling and make it easier to apply predefined styles.
+ */
+
 export enum Color {
   primary = "#E7E7D6",
   secondary = "#AEAC92",

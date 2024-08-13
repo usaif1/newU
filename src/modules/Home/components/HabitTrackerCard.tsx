@@ -1,3 +1,8 @@
+/**
+ * The HabitTrackerCard component is responsible for tracking and displaying the progress of a habit instance.
+ * It manages the state of the habit tracker and calculates streaks based on the current date.
+ */
+
 // dependencies
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -30,6 +35,11 @@ const HabitTrackerCard: React.FC<HabitTrackerCardProps> = ({
   const [dailyStreak, setDailyStreak] = useState<number>(0);
   const [weeklyStreak, setWeeklyStreak] = useState<number>(0);
 
+  /**
+   * checks if the habit instance is tracked for the current day
+   * if not, creates a new tracker for the habit instance ( duplicate functionality in EditHabitForm screen )
+   * updates the state with the new tracker
+   */
   useEffect(() => {
     const todaysHabits = trackedHabits.filter((trackedHabit) => {
       return trackedHabit.inputDay === currentDate;
@@ -39,7 +49,6 @@ const HabitTrackerCard: React.FC<HabitTrackerCardProps> = ({
       return habit.habit_id === habitInstance.habit_id;
     });
 
-    console.log("foundHabit", foundHabit);
     if (!foundHabit) {
       const tracker: TrackedHabits = {
         frequency: habitInstance?.frequency,
@@ -71,6 +80,9 @@ const HabitTrackerCard: React.FC<HabitTrackerCardProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentDate, trackedHabits]);
 
+  /**
+   * calculates the daily and weekly streak for the habit instance
+   */
   useEffect(() => {
     const calculatedStreak = habitService.getStreak({
       date: currentDate,

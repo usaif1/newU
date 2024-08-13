@@ -1,3 +1,8 @@
+/**
+ * A customizable label component for forms, built using React.
+ * Used within form components to display a label for an input field.
+ */
+
 // dependencies
 import React from "react";
 

@@ -1,3 +1,12 @@
+/**
+ * The EditHabit component allows users to edit an existing habit instance.
+ * It displays the current habit details and provides controls to update the habit's value.
+ * 
+//  todo: Improvements ( brackets contain reason for current approach )  - 
+* - We can use onChange event handler to update tracked value and edit value instead of useEffect ( used to capture first render value for development changes/errors )
+* - We can use a single function to handle both boolean and value habit changes ( separated logic for ease of development and time constraints )
+*/
+
 // dependencies
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
@@ -25,6 +34,7 @@ const EditActivity: React.FC = () => {
   const [boolValue, setBoolValue] = useState<boolean>(false);
   const [valueToEdit, setValueToEdit] = useState<string>("");
 
+  // function to edit habit value
   const onClick = useCallback((type: "add" | "subtract") => {
     if (type === "add") {
       setValue((prev) => {
@@ -38,6 +48,7 @@ const EditActivity: React.FC = () => {
     }
   }, []);
 
+  // function to edit habit value in case of boolean habits ( habits with no values )
   const onClickBool = (is_completed: boolean) => {
     setBoolValue(is_completed);
 
@@ -72,10 +83,16 @@ const EditActivity: React.FC = () => {
     }
   };
 
+  // function to edit habit threshold
   const valueEditHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValueToEdit(e.target.value);
   };
 
+  /**
+   * this function checks if the selected habit exists in the daily habits tracker
+   * if it does not, it creates a new habit tracker for that habit instance ( duplicate functionality in HabitTrackerCard )
+   * it also updates the state with the new tracker
+   */
   useEffect(() => {
     const foundHabitInstance = dailyHabitsInstances.find((habit) => {
       return habit.habit_instance_id === habitinstanceid;
@@ -120,6 +137,9 @@ const EditActivity: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  /**
+   * this function updates the habit tracker state when the user updates the habit value
+   */
   useEffect(() => {
     if (value) {
       const dateFilteredHabits = trackedHabits.filter((habit) => {
@@ -162,6 +182,9 @@ const EditActivity: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
+  /**
+   * this function updates the habit tracker state when the user updates the habit threshold
+   */
   useEffect(() => {
     if (valueToEdit) {
       const dateFilteredHabits = trackedHabits.filter((habit) => {

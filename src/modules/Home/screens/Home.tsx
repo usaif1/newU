@@ -26,6 +26,9 @@ const Home: React.FC = () => {
     HabitInstace[]
   >([]);
 
+  /**
+   * updates the habit instances to show based on the current date using habit tracker data
+   */
   useEffect(() => {
     setHabitInstacesToShow([...dailyHabitsInstances, ...weeklyHabitsInstances]);
   }, [currentDate, dailyHabitsInstances, weeklyHabitsInstances]);

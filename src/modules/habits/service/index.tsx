@@ -69,6 +69,11 @@ class HabitService {
     }
   };
 
+  /**
+   * function to calculate daily streak
+   * @param args 
+   * @returns 
+   */
   public getStreak = (args: GetDailyStreakArgs) => {
     const currentDate = homeStore.getState().currentDate;
     const trackedHabits = habitsStore.getState().trackedHabits;
@@ -182,6 +187,7 @@ class HabitService {
     return mondaysArr.length;
   };
 
+  // function to check if selected day is a monday
   private checkMonday = (dateString: string): boolean => {
     const date = DateTime.fromISO(dateString);
     return date.weekday === 1;

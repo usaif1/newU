@@ -1,3 +1,8 @@
+/**
+ * The AddHabitForm component is responsible for adding a new habit instance and tracking it.
+ * It interacts with the habit service to create a new daily habit instance and updates the state accordingly.
+ */
+
 // dependencies
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -39,6 +44,10 @@ const AddActivity: React.FC = () => {
     setSelectedHabitFrequency(e.target.value as "daily" | "weekly");
   };
 
+  /**
+   * function to check if habit instance already exists
+   * @returns boolean
+   */
   const checkIfHabitInstanceExists = () => {
     const habitInstance = dailyHabitsInstances.find((instance) => {
       return instance.habit_id === selectedHabit?.habit_id;
@@ -49,6 +58,13 @@ const AddActivity: React.FC = () => {
     return false;
   };
 
+  /**
+   * this form submit handler creates a new habit instance and updates the state
+   * it also creates a new tracker for the habit instance ( tracker keeps track of daily/weekly habit completion)
+   * take the user back to home page after submission
+   * @param e:React.FormEvent
+   * @returns
+   */
   const submitHandler = (e: React.FormEvent) => {
     e.preventDefault();
 

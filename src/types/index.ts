@@ -1,3 +1,5 @@
+// custom types for the app
+
 export type Habit = {
   habit_id: string;
   habit_name: string;

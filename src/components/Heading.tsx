@@ -1,3 +1,8 @@
+/**
+ * A versatile heading component for displaying text with various styles and sizes.
+ * Used to display headings in the application.
+ */
+
 // dependencies
 import React from "react";
 

@@ -1,3 +1,8 @@
+/**
+ * A customizable text component for displaying paragraphs with various styles.
+ * Used to display text in the application to maintain a consistent typography.
+ */
+
 // dependencies
 import React from "react";
 

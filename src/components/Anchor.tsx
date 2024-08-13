@@ -1,4 +1,11 @@
-// de
+/**
+ * Anchor Component
+*  The Anchor component is a styled link component that leverages react-router-dom's Link component. 
+*  It allows for additional styling options such as color, weight, and size.
+*  It serves as the common link component for the application.
+ */
+
+// dependencies
 import React from "react";
 import { Link, LinkProps } from "react-router-dom";
 

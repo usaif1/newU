@@ -10,11 +10,11 @@ import { HabitInstace, TrackedHabits } from "@/types";
 // state
 type HabitsState = {
   // new habit instances
-  dailyHabitsInstances: HabitInstace[];
-  weeklyHabitsInstances: HabitInstace[];
+  dailyHabitsInstances: HabitInstace[]; // instance of a daily habit
+  weeklyHabitsInstances: HabitInstace[]; // instance of a weekly habit ( not currently used )
 
   //tracking
-  trackedHabits: TrackedHabits[];
+  trackedHabits: TrackedHabits[]; // tracker for the habit instances. keeps daily track of the habit instances 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   dailyStreak: any[];
 };

@@ -1,3 +1,8 @@
+/**
+ * A container component that wraps its children with customizable width and other HTML attributes.
+ * Serves as the first level container for the different screens in the application to maintain a consistent layout.
+ */
+
 // depdenencies
 import React, { HTMLAttributes } from "react";
 

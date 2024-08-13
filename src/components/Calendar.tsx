@@ -1,3 +1,8 @@
+/**
+ * The Calendar component is a React functional component that displays a list of dates. 
+ * Users can select a date, which updates the current date in the global store.
+ */
+
 // dependencies
 import React from "react";
 import { DateTime } from "luxon";
