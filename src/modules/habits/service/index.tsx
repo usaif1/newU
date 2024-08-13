@@ -1,6 +1,9 @@
 /**
  * @module Habit
  * @description This module contains the service file for the Habit module.
+ * 
+ * todo: Improvements
+ * streak functions can be optimized
  */
 
 // depdencies

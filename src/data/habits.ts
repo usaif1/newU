@@ -1,4 +1,5 @@
 // custom habits data
+// using local data to populate the habit list due to time constraints
 
 // types
 import { Habit } from "@/types";
