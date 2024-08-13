@@ -1,7 +1,7 @@
 /**
  * @module Habit
  * @description This module contains the service file for the Habit module.
- * 
+ *
  * todo: Improvements
  * streak functions can be optimized
  */
@@ -74,8 +74,8 @@ class HabitService {
 
   /**
    * function to calculate daily streak
-   * @param args 
-   * @returns 
+   * @param args
+   * @returns
    */
   public getStreak = (args: GetDailyStreakArgs) => {
     const currentDate = homeStore.getState().currentDate;
@@ -132,7 +132,6 @@ class HabitService {
       let cumulative = 0;
 
       for (let i = j - 1; i >= Math.max(0, j - 7); i--) {
-        console.log("sortedArr[i]", sortedArr[i]);
         if (sortedArr[i].inputDay === currentDate) {
           continue;
         } else {

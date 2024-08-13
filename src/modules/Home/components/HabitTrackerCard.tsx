@@ -75,8 +75,6 @@ const HabitTrackerCard: React.FC<HabitTrackerCardProps> = ({
       setTodaysHabit(foundHabit);
     }
 
-    console.log("cumulative", foundHabit?.cumulative);
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentDate, trackedHabits]);
 
