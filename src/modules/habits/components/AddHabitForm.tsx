@@ -52,7 +52,7 @@ const AddActivity: React.FC = () => {
   const submitHandler = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (checkIfHabitInstanceExists()) return alert("Habit alreay added");
+    if (checkIfHabitInstanceExists()) return alert("Habit already added");
 
     const payload: HabitInstace = {
       created_on: currentDate,
@@ -81,6 +81,7 @@ const AddActivity: React.FC = () => {
       requiredValue: Number(habitValue),
       streak: 0,
       tracker_id: `${selectedHabit?.habit_id}${selectedHabitFrequency}${currentDate}`,
+      cumulative: 0,
     };
 
     habitService.createNewHabitInstanceDaily({

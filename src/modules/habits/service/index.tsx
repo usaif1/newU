@@ -3,18 +3,25 @@
  * @description This module contains the service file for the Habit module.
  */
 
+// depdencies
+import { DateTime } from "luxon";
+
 // store
 import { homeStore, habitsStore } from "@/global/stores";
 
 // types
 import { HabitInstace, TrackedHabits } from "@/types";
-
 type CreateNewHabitInstanceDailyArgs = {
   dailyHabits: HabitInstace[];
   tracker: TrackedHabits;
 };
 
-type GetStreakArgs = {
+type GetDailyStreakArgs = {
+  date: string;
+  habitInstaceId: string;
+};
+
+type GetWeeklyStreakArgs = {
   date: string;
   habitInstaceId: string;
 };
@@ -62,7 +69,7 @@ class HabitService {
     }
   };
 
-  public getStreak = (args: GetStreakArgs) => {
+  public getStreak = (args: GetDailyStreakArgs) => {
     const currentDate = homeStore.getState().currentDate;
     const trackedHabits = habitsStore.getState().trackedHabits;
     const trackedHabitsByDate = trackedHabits.filter((trackedHabit) => {
@@ -89,14 +96,95 @@ class HabitService {
       }
     }
 
-    console.log("currenDate", currentDate);
-    console.log("trackedHabits", trackedHabits);
-    console.log("trackedHabitsByDate", trackedHabitsByDate);
-    console.log("currentHabitTracker", currentHabitTracker);
-    console.log("sortedArr", sortedArr);
-
-    console.log("streak", streak);
     return streak;
+  };
+
+  public getWeeklyStreak = (args: GetWeeklyStreakArgs) => {
+    const currentDate = homeStore.getState().currentDate;
+
+    const mondaysArr: TrackedHabits[] = [];
+
+    const trackedHabits = habitsStore.getState().trackedHabits;
+    const trackedHabitsByDate = trackedHabits.filter((trackedHabit) => {
+      return trackedHabit.inputDay <= args.date;
+    });
+
+    const currentHabitTracker = trackedHabitsByDate.filter((habit) => {
+      return habit.habitInstance_id === args.habitInstaceId;
+    });
+
+    const sortedArr = currentHabitTracker.sort((a, b) => {
+      return Date.parse(a.inputDay) - Date.parse(b.inputDay);
+    });
+
+    for (let j = 0; j < sortedArr.length; j++) {
+      const isValueMonday = this.checkMonday(sortedArr[j]?.inputDay);
+      if (!isValueMonday) continue;
+
+      let cumulative = 0;
+
+      for (let i = j - 1; i >= Math.max(0, j - 7); i--) {
+        console.log("sortedArr[i]", sortedArr[i]);
+        if (sortedArr[i].inputDay === currentDate) {
+          continue;
+        } else {
+          cumulative += sortedArr[i].inputValue;
+        }
+      }
+
+      if (cumulative >= sortedArr[j]?.requiredValue) {
+        mondaysArr.push(sortedArr[j]);
+      }
+    }
+
+    return mondaysArr.length;
+  };
+
+  public getWeeklyStreakBool = (args: GetWeeklyStreakArgs) => {
+    const currentDate = homeStore.getState().currentDate;
+    const trackedHabits = habitsStore.getState().trackedHabits;
+
+    const mondaysArr: TrackedHabits[] = [];
+
+    // Filter and sort tracked habits to calculate streak
+    const sortedArr = trackedHabits
+      .filter(
+        (habit) =>
+          habit.inputDay <= args.date &&
+          habit.habitInstance_id === args.habitInstaceId
+      )
+      .sort((a, b) => Date.parse(a.inputDay) - Date.parse(b.inputDay));
+
+    let found = false;
+
+    for (let j = 0; j < sortedArr.length && !found; j++) {
+      const currentEntry = sortedArr[j];
+
+      if (!this.checkMonday(currentEntry?.inputDay)) {
+        continue;
+      }
+
+      for (let i = j - 1; i >= Math.max(0, j - 7) && !found; i--) {
+        const previousEntry = sortedArr[i];
+
+        if (previousEntry.inputDay === currentDate) {
+          continue;
+        }
+
+        if (previousEntry?.is_completed) {
+          mondaysArr.push(previousEntry);
+          found = true; // Set flag to break outer loop
+          break; // Break the inner loop
+        }
+      }
+    }
+
+    return mondaysArr.length;
+  };
+
+  private checkMonday = (dateString: string): boolean => {
+    const date = DateTime.fromISO(dateString);
+    return date.weekday === 1;
   };
 }
 

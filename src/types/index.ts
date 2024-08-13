@@ -33,4 +33,5 @@ export type TrackedHabits = {
   frequency: "daily" | "weekly";
   streak: number;
   is_completed: boolean;
+  cumulative: number;
 };
