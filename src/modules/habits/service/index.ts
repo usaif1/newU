@@ -175,7 +175,6 @@ class HabitService {
         if (previousEntry.inputDay === currentDate) {
           continue;
         }
-        console.log("previousEntry", previousEntry);
         if (previousEntry?.is_completed) {
           mondaysArr.push(previousEntry);
           break; // Break the inner loop

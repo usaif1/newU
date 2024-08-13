@@ -85,7 +85,6 @@ const EditActivity: React.FC = () => {
 
   // function to edit habit threshold
   const valueEditHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log();
     setValueToEdit(e.target.value);
   };
 

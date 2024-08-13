@@ -89,15 +89,14 @@ const HabitTrackerCard: React.FC<HabitTrackerCardProps> = ({
 
     setDailyStreak(calculatedStreak);
 
-    console.log(
-      `habitInstance.habit_instance_threshold`,
-      habitInstance.habit_instance_threshold
-    );
     /**
      * this is done because the habit instance threshold is an empty string initially
      * need to improve threshold handling logic
      */
-    if (habitInstance.habit_instance_threshold && parseInt(habitInstance.habit_instance_threshold)) {
+    if (
+      habitInstance.habit_instance_threshold &&
+      parseInt(habitInstance.habit_instance_threshold)
+    ) {
       const weeklyStreak = habitService.getWeeklyStreak({
         date: currentDate,
         habitInstaceId: habitInstance.habit_instance_id,
